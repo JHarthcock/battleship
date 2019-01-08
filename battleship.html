@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Battleship</title>
+</head>
+<style>
+  
+  div#onScreenGrid {
+    width: 698px;
+    margin: auto;
+  }
+
+
+div.column {
+  border-style: dotted;
+  border-width: 2px;
+}
+
+.myRow {
+  width: 100%;
+  margin: auto;
+}
+
+  .column {
+    width: 200px;
+    height: 200px;
+    display: inline;
+    float: left;
+    font-size: 50px;
+  }
+
+
+.column {
+  width: 200px;
+  height: 200px;
+  margin: auto;
+  background-color: aquamarine;
+  color: red;
+}
+</style>
+
+
+
+
+<body>
+<h1>BattleShip</h1>
+    
+    
+<!--This is the board for battleship. onclick="play({coordinates}) makes console.log() show something in your console.-->
+<div id="onScreenGrid">
+    <div class="myRow">
+      <div class="column" data-x ="1" data-y ="1" onclick="play()">1</div>
+      <div class="column" data-x ="2" data-y ="1" onclick="play()">2</div>
+      <div class="column" data-x ="3" data-y ="1" onclick="play()">3</div>
+      <div class="column" data-x ="1" data-y ="2" onclick="play()">4</div>
+      <div class="column" data-x ="2" data-y ="2" onclick="play()">5</div>
+      <div class="column" data-x ="3" data-y ="2" onclick="play()">6</div>
+      <div class="column" data-x ="1" data-y ="3" onclick="play()">7</div>
+      <div class="column" data-x ="2" data-y ="3" onclick="play()">8</div>
+      <div class="column" data-x ="3" data-y ="3" onclick="play()">9</div>
+    </div>
+  </div>
+  <button onclick = "setPlayer1()">Set Player 1</button>
+  <h3>How Battleship is Played.</h3>
+  <h4>Game Objective</h4>
+        <p>The object of Battleship is to try and sink all of the other player's before they sink all of your ships. All of the other player's ships are somewhere on his/her board.  You try and hit them by calling out the coordinates of one of the squares on the board.  The other player also tries to hit your ships by calling out coordinates.  Neither you nor the other player can see the other's board so you must try to guess where they are.  Each board in the physical game has two grids:  the lower (horizontal) section for the player's ships and the upper part (vertical during play) for recording the player's guesses.</p>
+        
+    <h4>Starting a New Game</h4>
+        <p>Each player places the 3 ships somewhere on their board.  The ships can only be placed vertically or horizontally. Diagonal placement is not allowed. No part of a ship may hang off the edge of the board.  Ships may not overlap each other.  No ships may be placed on another ship. 
+        Once the guessing begins, the players may not move the ships.</p>
+        
+    <h4>Playing the Game</h4>
+        <p>Player's take turns guessing by calling out the coordinates. The opponent responds with "hit" or "miss" as appropriate.
+        
+        As soon as all of one player's ships have been sunk, the game ends.</p>
+        
+
+<script>
+        var turn = true; // player1 === true, player2 === false
+        var gameOver = false;
+        var player1 = {
+            x: 1,
+            y: 1
+        };
+        var player2 = {
+            x: randomNumber(),
+            y: randomNumber()
+        };
+    function play() {
+        // This checks to see if you hit Player2 (The computer)
+        var objXY = {
+            x: Number(event.target.dataset.x),
+            y: Number(event.target.dataset.y)
+        }
+        var hitTarget = false;
+        var player = "";
+
+        if(gameOver) {
+            return;
+        }
+
+        if(turn) {
+            turn = false;
+            hitTarget = checkForHit(objXY, player2);
+            player = "Player 1";
+            //what happens for me.
+
+
+        } else {
+            turn = true;
+            shot = {
+                x: randomNumber(),
+                y: randomNumber()
+            }
+            //did the computer hit me?
+            var hitTarget = checkForHit(shot, player1);
+            player = "Player 2";
+            //what happens for computer.
+        }
+
+        if(hitTarget) { //true or false
+            console.log("You Win " + player + "!");
+            gameOver = true;
+        } else {
+            console.log("You Missed " + player + "!");
+            if (!turn) {
+                play();
+            }
+        }
+    }
+    function setPlayer1() {
+        var tiles = document.querySelectorAll(".tile");
+        tiles.forEach(function(tile) {
+            tile.addEventListener("click", function() {
+                player1 = {
+                    x: Number(event.target.dataset.x),
+                    y: Number(event.target.dataset.y)
+                }
+            });
+        });
+    }
+    function randomNumber() {
+        return Math.ceil(Math.random() * 3);
+    }
+    function checkForHit(shot, player){
+        for (const coord in shot) {
+            var coord1 = shot[coord];
+            var coord2 = player[coord];
+
+            if (coord1 !== coord2) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+
+    function randomTile(){
+        return Math.ceil(Math.random() * 3);
+
+    }
+</script>
+</body>
+</html>
